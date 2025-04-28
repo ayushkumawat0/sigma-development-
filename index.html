@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- steap   1 .... -->
+    <section id="welcome" class="reveal">
+        <h1>Welcome to My Universal</h1>
+        <p>Explore the magic of the universal</p>
+    </section>
+    <!-- step 2 :education qulaifaction   -->
+    <section id="education" class="reveal">
+        <h2>Education Qulification</h2>
+        <p>🎓 10th Pass - 81% (RBSE)</p>
+        <p>🎓 12th Arts - 62% (RBSE)</p>
+        <p>🎓 Currently pursuing BCA</p>
+    </section>
+
+    <!-- Step 3: Email Form -->
+    <section id="contact" class="reveal">
+      <h2>Contact Me</h2>
+      <form id="emailForm">
+        <input type="email" id="email" placeholder="Enter your email" required><br>
+        <input type="submit" value="Submit">
+      </form>
+    </section>
+  
+    <!-- Step 4: OX Game -->
+    <section id="game" class="reveal">
+      <h2>Let's Play OX Game!</h2>
+      <div class="board" id="board">
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+      </div>
+      <h3 id="winningMessage" class="hidden"></h3>
+    </section>
+  
+    <script>
+      // Animation on scroll
+      const sections = document.querySelectorAll('.reveal');
+      window.addEventListener('scroll', revealSections);
+  
+      function revealSections() {
+        const triggerBottom = window.innerHeight / 5 * 4;
+        sections.forEach(section => {
+          const sectionTop = section.getBoundingClientRect().top;
+          if (sectionTop < triggerBottom) {
+            section.classList.add('active');
+          } else {
+            section.classList.remove('active');
+          }
+        });
+      }
+  
+      // Game Code
+      const emailForm = document.getElementById('emailForm');
+      const gameSection = document.getElementById('game');
+      const board = document.getElementById('board');
+      const cells = document.querySelectorAll('[data-cell]');
+      const winningMessage = document.getElementById('winningMessage');
+  
+      let isXturn = true;
+  
+      emailForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        board.style.display = 'grid';
+      });
+  
+      cells.forEach(cell => {
+        cell.addEventListener('click', handleClick, { once: true });
+      });
+  
+      function handleClick(e) {
+        const cell = e.target;
+        const currentClass = isXturn ? 'X' : 'O';
+        cell.textContent = currentClass;
+        if (checkWin(currentClass)) {
+          winningMessage.textContent = `${currentClass} Wins!`;
+          winningMessage.style.display = 'block';
+          board.style.pointerEvents = 'none';
+        }
+        isXturn = !isXturn;
+      }
+  
+      function checkWin(currentClass) {
+        const winCombos = [
+          [0,1,2], [3,4,5], [6,7,8], 
+          [0,3,6], [1,4,7], [2,5,8],
+          [0,4,8], [2,4,6]
+        ];
+        return winCombos.some(combo => {
+          return combo.every(index => {
+            return cells[index].textContent === currentClass;
+          });
+        });
+      }
+    </script>
+  
+</body>
+
+</html>
